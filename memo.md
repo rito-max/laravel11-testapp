@@ -66,7 +66,7 @@ use Illuminate\Support\Facades\Schedule;
 Schedule::command('model:prune')->daily();
 ```
 
-#scope
+## scope
 
 -   global
     毎回自動で、クエリを付与できる。（これが存在することを知らないと、なんでこうなるのってなるから注意

@@ -3,9 +3,17 @@
 @section('title', '銘柄詳細')
  
 @section('content')
+    <div class="">
+        <a href="{{ route('stock.index') }}">株銘柄一覧</a>
+        <p>銘柄詳細</p>
+    </div>
     <h1>銘柄詳細</h1>
-    <p class="">銘柄名</p>
-    <h2>{{ $stock->name }}</h2>
+    @include('components.success')
+    <h2 class="">銘柄名</h2>
+    <p>{{ $stock->name }}</p>
+    <h2>保有情報</h2>
+    <p>金額: {{ $totalInfoArray['price'] }}</p>
+    <p>数量: {{ $totalInfoArray['quantity'] }}</p>
     <div class="">
         <a href="{{ route('stock.transaction.create', $stock) }}" class="">新規登録</a>
         <table class="">
@@ -17,7 +25,7 @@
                 <th>操作</th>
             </thead>
             <tbody>
-                @foreach($stock->transactions->sortBy('price') as $transaction)
+                @foreach($stock->transactions->sortBy('date') as $transaction)
                 <tr>
                     <td>{{ $transaction->formatted_date }}</td>
                     <td>{{ $transaction->formatted_price }}</td>

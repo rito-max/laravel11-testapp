@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Stock;
+use App\Http\Requests\StockRequest;
 
 class StockController extends Controller
 {
@@ -12,7 +13,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        $date['stocks'] = Stock::withCount('transactions')->get();
+        $date['stocks'] = Stock::withCount('transactions')->orderByDesc('updated_at')->get();
         return view('stock.index', $date);
     }
 
@@ -21,15 +22,20 @@ class StockController extends Controller
      */
     public function create()
     {
-        return view('stock.create');
+        $data['stock'] = new Stock();
+        $data['url'] = route('stock.store');
+        return view('stock.create', $data);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StockRequest $request)
     {
-        dd('store');
+        Stock::create($request->all());
+
+        $request->session()->flash('success', '株銘柄を登録しました。');
+        return redirect()->route('stock.index');
     }
 
     /**
@@ -38,6 +44,7 @@ class StockController extends Controller
     public function show(Stock $stock)
     {
         $data['stock'] = $stock->load('transactions');
+        $data['totalInfoArray'] = $stock->getTotalInfo();
         return view('stock.show', $data);
     }
 
@@ -46,15 +53,22 @@ class StockController extends Controller
      */
     public function edit(Stock $stock)
     {
-        return view('stock.create');
+        $data['stock'] = $stock;
+        $data['url'] = route('stock.update', $stock);
+        return view('stock.create', $data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Stock $stock)
+    public function update(StockRequest $request, Stock $stock)
     {
-        dd('update');
+        $stock->name = $request->name;
+        if ($stock->isDirty()) {
+            $stock->update();
+            $request->session()->flash('success', '株銘柄を更新しました。');
+        }
+        return redirect()->route('stock.index');
     }
 
     /**
@@ -62,6 +76,8 @@ class StockController extends Controller
      */
     public function destroy(Stock $stock)
     {
-        dd('delete');
+        $stock->delete();
+        session()->flash('success', $stock->name . "の株銘柄を削除しました。");
+        return redirect()->route('stock.index');
     }
 }

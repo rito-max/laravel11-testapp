@@ -61,7 +61,7 @@ class Transaction extends Model
     protected function formattedPrice(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => $attributes['type'] === Type::Buy->value ? '-' . number_format($attributes['price']) : number_format($attributes['price']),
+            get: fn (mixed $value, array $attributes) => number_format($attributes['price']),
         )->shouldCache();
     }
 
@@ -71,7 +71,7 @@ class Transaction extends Model
     protected function formattedQuantity(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => $attributes['type'] === Type::Sell->value ? '-' . number_format($attributes['quantity']) : number_format($attributes['quantity']),
+            get: fn (mixed $value, array $attributes) => number_format($attributes['quantity']),
         )->shouldCache();
     }
 

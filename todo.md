@@ -10,8 +10,8 @@
 
 -   routing 設定
 -   top, stock の CRUD 作成(Transaction の一覧は、stock の詳細に表示すること)、stock の詳細画面に、取引の追加、削除リンク、機能を追加。
--   画面を簡単に tailwind で装飾
 -   docker の公開リポジトリを作成して PUSH
+-   画面を簡単に tailwind で装飾
 
 ## 2/x
 
@@ -42,4 +42,12 @@ sail artisan make:factory StockFactory
 sail artisan make:factory TransactionFactory
 sail artisan make:controller TransactionController --resource
 sail artisan make:controller StockController --resource
+sail artisan make:request StockRequest
+sail artisan make:request TransactionRequest
+```
+
+バリデーションメッセージのローカライズファイル作成
+
+```
+sail artisan lang:publish
 ```

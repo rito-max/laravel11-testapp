@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\Transaction\Type;
 
 class Stock extends Model
 {
@@ -24,6 +25,16 @@ class Stock extends Model
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function getTotalInfo(): Array
+    {
+        $sellTransactions = $this->transactions->where('type', Type::Sell);
+        $buyTransactions = $this->transactions->where('type', Type::Buy);
+
+        $data['price'] = number_format($buyTransactions->sum('price') - $sellTransactions->sum('price'));
+        $data['quantity'] = number_format($buyTransactions->sum('quantity') - $sellTransactions->sum('quantity'));
+        return $data;
     }
 
 
