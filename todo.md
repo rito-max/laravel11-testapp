@@ -15,6 +15,7 @@
 
 ## 2/x
 
+-   ログイン機能追加
 -   株銘柄の pegination
 -   各モデルの、event クラスと observer クラスの作成（機能の動作確認のために実装してみる。event 発火したことをログに出力させる）
 -   feature test 作成
@@ -51,3 +52,7 @@ sail artisan make:request TransactionRequest
 ```
 sail artisan lang:publish
 ```
+
+## tailwind の色一覧　便利！
+
+https://tailwindcss.com/docs/colors

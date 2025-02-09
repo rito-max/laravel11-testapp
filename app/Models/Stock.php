@@ -32,7 +32,15 @@ class Stock extends Model
         $sellTransactions = $this->transactions->where('type', Type::Sell);
         $buyTransactions = $this->transactions->where('type', Type::Buy);
 
-        $data['price'] = number_format($buyTransactions->sum('price') - $sellTransactions->sum('price'));
+        $buySum = $buyTransactions->reduce(function (int $carry, Transaction $item) {
+            return $carry + $item->price * $item->quantity;
+        }, 0);
+        $sellSum = $sellTransactions->reduce(function (int $carry, Transaction $item) {
+            return $carry + $item->price * $item->quantity;
+        }, 0);
+
+        $data['avg_price_buy'] = number_format($buySum / $buyTransactions->sum('quantity'));
+        $data['avg_price_sell'] = number_format($sellSum / $sellTransactions->sum('quantity'));
         $data['quantity'] = number_format($buyTransactions->sum('quantity') - $sellTransactions->sum('quantity'));
         return $data;
     }

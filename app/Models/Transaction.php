@@ -27,7 +27,6 @@ class Transaction extends Model
         'quantity',
         'type',
         'stock_id',
-        // 'deleted_at', TODO: 明示的に必要かどうか、要検証
     ];
 
     public function stock(): BelongsTo
