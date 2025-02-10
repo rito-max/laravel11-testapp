@@ -195,6 +195,8 @@ return [
         'price' => '金額',
         'quantity' => '数量',
         'type' => '取引タイプ',
+        'email' => 'メールアドレス',
+        'password' => 'パスワード',
     ],
 
 ];
