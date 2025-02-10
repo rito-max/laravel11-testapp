@@ -43,5 +43,13 @@
             @endforeach
         </ul>
         @endforeach
+        <div class="flex justify-between my-12">
+            @if($stocks->currentPage() !== 1)
+            <a href="{{ $stocks->url($stocks->currentPage() - 1) }}" class="text-right">< Prev</a>
+            @endif
+            @if($stocks->hasMorePages())
+            <a href="{{ $stocks->url($stocks->currentPage() + 1) }}" class="text-right ml-auto">Next ></a>
+            @endif
+        </div>
     </div>
 @endsection

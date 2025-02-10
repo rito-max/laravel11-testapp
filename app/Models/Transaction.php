@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Enums\Transaction\Type;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use App\Observers\TransactionObserver;
 
-// TODO: observerでイベントをまとめて監視　ShouldHandleEventsAfterCommitでtransactionをコミットした際に実行されるようにする
-// https://laravel.com/docs/11.x/eloquent#observers
+#[ObservedBy([TransactionObserver::class])]
 class Transaction extends Model
 {
     use SoftDeletes, HasFactory;

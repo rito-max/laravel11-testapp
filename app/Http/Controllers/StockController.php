@@ -13,7 +13,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        $date['stocks'] = Stock::withCount('transactions')->orderByDesc('updated_at')->get();
+        $date['stocks'] = Stock::withCount('transactions')->orderByDesc('updated_at')->simplePaginate(6);
         return view('stock.index', $date);
     }
 
