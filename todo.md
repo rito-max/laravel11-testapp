@@ -17,29 +17,50 @@
 
 -   株銘柄の pegination
 -   各モデルの、event クラスと observer クラスの作成（機能の動作確認のために実装してみる。event 発火したことをログに出力させる）
--   feature test 作成
+-   feature test を一部作成
 -   セッションベースのログイン機能追加
+
+## 2/11
+
+-   ログイン通知メール、ファイル添付
+-   Prunable で、論理削除された取引データを定期的に完全に削除する処理を追加。（機能の動作確認のために実装してみる）
 
 ## 2/x
 
--   Prunable で、論理削除された取引データを定期的に完全に削除する処理を追加。（機能の動作確認のために実装してみる）
--   API 機能追加、Sentinum の導入
+-   Sentinum の導入、API トークンベース認証追加
+-   API 機能追加（株銘柄一覧取得 API）
 
-## 便利コマンド　メモ
+# 各種 便利コマンド　メモ
 
-DB 作り直し＆seed 実行
+## DB 作り直し＆seed 実行
 
 ```
 sail artisan migrate:fresh --seed
 ```
 
-DB 接続
+## DB 接続
 
 ```
 sail exec mysql mysql -u sail -p
 ```
 
-その他、ファイル作成コマンドなど、メモ
+## npm バックグランド実行
+
+```
+sail npm run dev &
+```
+
+## log を tailing
+
+リアルタイムでログ追えるので便利！
+
+```
+sail artisan pail
+```
+
+https://laravel.com/docs/11.x/logging#tailing-log-messages-using-pail
+
+## ファイル作成コマンドなど、メモ
 
 ```
 sail artisan make:seeder StockSeeder
@@ -51,22 +72,18 @@ sail artisan make:request StockRequest
 sail artisan make:request TransactionRequest
 sail artisan make:event StockSaved
 sail artisan make:listener SendSlackNotification --event=StockSaved
+sail artisan make:listener LoginMail
 sail artisan make:controller LoginController --test
 sail artisan make:test StockControllerTest
-```
-
-バリデーションメッセージのローカライズファイル作成
-
-```
-sail artisan lang:publish
+sail artisan make:mail LoginMail
 ```
 
 ## tailwind の色一覧　便利！
 
 https://tailwindcss.com/docs/colors
 
-npm バックグランド実行
+## prune コマンド実行された時の対象ファイルと対象データ件数を確認できるので便利
 
 ```
-sail npm run dev &
+sail artisan model:prune --pretend
 ```

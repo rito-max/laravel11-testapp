@@ -11,11 +11,14 @@ use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use App\Observers\TransactionObserver;
+use Illuminate\Database\Eloquent\Prunable;
+use Log;
+use Illuminate\Database\Eloquent\Builder;
 
 #[ObservedBy([TransactionObserver::class])]
 class Transaction extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, Prunable;
 
     /**
      * The attributes that are mass assignable.
@@ -33,6 +36,25 @@ class Transaction extends Model
     public function stock(): BelongsTo
     {
         return $this->belongsTo(Stock::class);
+    }
+
+    /**
+     * Get the prunable model query.
+     */
+    public function prunable(): Builder
+    {
+        return static::whereNotNull('deleted_at');
+    }
+
+    /**
+     * prune直前に、関連するファイルを削除したりできる。とりあえずログを出しておく。
+     * deleted,deleting,pruningのモデルイベントをリッスンする必要がない場合は、mass pruningすることで、prune処理が効率的になることを覚えておく。
+     * https://laravel.com/docs/11.x/eloquent#mass-pruning
+     */
+    protected function pruning(): void
+    {
+        $cnt = self::whereNotNull('deleted_at')->count();
+        Log::info("これからpruneします。削除対象データ数は{$cnt}件です");
     }
 
     /**

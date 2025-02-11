@@ -93,16 +93,6 @@ Schedule::command('model:prune')->daily();
 sail で作った DB は、日本語文字化けする。
 sail artisan sail:publish で、docker をカスタマイズできる！
 
-## log を tailing
-
-リアルタイムでログ追えるので便利！
-
-```
-sail artisan pail
-```
-
-https://laravel.com/docs/11.x/logging#tailing-log-messages-using-pail
-
 ## observer でイベントをまとめて監視
 
 sail artisan make:observer TransactionObserver --model=Transaction
