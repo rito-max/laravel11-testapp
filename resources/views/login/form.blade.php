@@ -15,7 +15,7 @@
                 <p class="font-bold">パスワード</p>
                 <input type="password" name="password" value="{{ old('password') }}" class="bg-neutral-100 px-2 py-3 mt-2 rounded-md w-96">
             </label>
-            <button class="rounded-full bg-emerald-600 text-white mt-8 px-5 py-3 text-sm w-40">登録</button>
+            <button class="rounded-full bg-emerald-600 text-white mt-8 px-5 py-3 text-sm w-40">ログイン</button>
         </form>
         @include('components.error')
 </div>
