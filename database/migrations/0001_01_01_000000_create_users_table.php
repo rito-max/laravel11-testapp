@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\User\Roll;
+use App\Enums\User\Role;
 
 return new class extends Migration
 {
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedTinyInteger('roll_id')->default(Roll::Reader->value)->comment('取引タイプ 1:閲覧専用ユーザー 2:編集可能ユーザー');
+            $table->unsignedTinyInteger('role_id')->default(Role::Reader->value)->comment('取引タイプ 1:閲覧専用ユーザー 2:編集可能ユーザー');
             $table->rememberToken();
             $table->timestamps();
         });

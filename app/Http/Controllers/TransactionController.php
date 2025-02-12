@@ -7,6 +7,8 @@ use App\Models\Stock;
 use App\Models\Transaction;
 use App\Http\Requests\TransactionRequest;
 use App\Enums\Transaction\Type;
+use Illuminate\Support\Facades\Gate;
+use Auth;
 
 class TransactionController extends Controller
 {
@@ -16,6 +18,11 @@ class TransactionController extends Controller
      */
     public function create(Stock $stock)
     {
+        //権限チェック（via-the-user-model）
+        if (Auth::user()->cannot('create', Transaction::class)) {
+            abort(403);
+        }
+
         $data['stock'] = $stock;
         $data['options'] = Type::cases();
         return view('transaction.create', $data);
@@ -26,6 +33,11 @@ class TransactionController extends Controller
      */
     public function store(TransactionRequest $request, Stock $stock)
     {
+        //権限チェック（via-the-user-model）
+        if (Auth::user()->cannot('create', Transaction::class)) {
+            abort(403);
+        }
+
         $stock->transactions()->create($request->all());
         session()->flash('success', "取引データを登録しました。");
         return redirect()->route('stock.show', $stock);
@@ -36,6 +48,11 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
+        //権限チェック（via-the-user-model）
+        if (Auth::user()->cannot('delete', $transaction)) {
+            abort(403);
+        }
+
         $transaction->delete();
         session()->flash('success', "取引データを削除しました。");
         return redirect()->back();

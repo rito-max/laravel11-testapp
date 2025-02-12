@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Stock;
 use App\Http\Requests\StockRequest;
+use Illuminate\Support\Facades\Gate;
 
 class StockController extends Controller
 {
@@ -13,6 +14,9 @@ class StockController extends Controller
      */
     public function index()
     {
+        //権限チェック
+        Gate::authorize('viewAny', Stock::class);
+
         $date['stocks'] = Stock::withCount('transactions')->orderByDesc('updated_at')->simplePaginate(6);
         return view('stock.index', $date);
     }
@@ -22,6 +26,9 @@ class StockController extends Controller
      */
     public function create()
     {
+        //権限チェック
+        Gate::authorize('create', Stock::class);
+
         $data['stock'] = new Stock();
         $data['url'] = route('stock.store');
         return view('stock.create', $data);
@@ -32,6 +39,9 @@ class StockController extends Controller
      */
     public function store(StockRequest $request)
     {
+        //権限チェック
+        Gate::authorize('create', Stock::class);
+
         Stock::create($request->all());
 
         $request->session()->flash('success', '株銘柄を登録しました。');
@@ -43,6 +53,9 @@ class StockController extends Controller
      */
     public function show(Stock $stock)
     {
+        //権限チェック
+        Gate::authorize('view', $stock);
+
         $data['stock'] = $stock->load('transactions');
         $data['totalInfoArray'] = $stock->getTotalInfo();
         return view('stock.show', $data);
@@ -53,6 +66,9 @@ class StockController extends Controller
      */
     public function edit(Stock $stock)
     {
+        //権限チェック
+        Gate::authorize('update', $stock);
+
         $data['stock'] = $stock;
         $data['url'] = route('stock.update', $stock);
         return view('stock.create', $data);
@@ -63,6 +79,9 @@ class StockController extends Controller
      */
     public function update(StockRequest $request, Stock $stock)
     {
+        //権限チェック
+        Gate::authorize('update', $stock);
+
         $stock->name = $request->name;
         if ($stock->isDirty()) {
             $stock->update();
@@ -76,6 +95,9 @@ class StockController extends Controller
      */
     public function destroy(Stock $stock)
     {
+        //権限チェック
+        Gate::authorize('delete', $stock);
+
         $stock->delete();
         session()->flash('success', $stock->name . "の株銘柄を削除しました。");
         return redirect()->route('stock.index');

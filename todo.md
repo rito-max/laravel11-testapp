@@ -25,7 +25,22 @@
 -   ログイン通知メール、ファイル添付
 -   Prunable で、論理削除された取引データを定期的に完全に削除する処理を追加。（機能の動作確認のために実装してみる）
 
+## 2/12
+
+-   Gate でモデル操作以外の権限管理
+    https://laravel.com/docs/11.x/authorization#gates
+-   Policy でモデル操作以外の権限管理
+    https://laravel.com/docs/11.x/authorization#creating-policies
+    stock モデル:user モデル経由、transaction モデル:Gate ファサード経由、それぞれで 2 パターン方法を試す
+    https://laravel.com/docs/11.x/authorization#via-the-user-model
+    https://laravel.com/docs/11.x/authorization#via-the-gate-facade
+
 ## 2/x
+
+-   ログイン通知メール処理をキューで処理するようにする
+    https://laravel.com/docs/11.x/queues
+
+## 2/xx
 
 -   Sentinum の導入、API トークンベース認証追加
 -   API 機能追加（株銘柄一覧取得 API）
@@ -76,6 +91,8 @@ sail artisan make:listener LoginMail
 sail artisan make:controller LoginController --test
 sail artisan make:test StockControllerTest
 sail artisan make:mail LoginMail
+sail artisan make:policy StockPolicy --model=Stock
+sail artisan make:policy TransactionPolicy --model=Transaction
 ```
 
 ## tailwind の色一覧　便利！

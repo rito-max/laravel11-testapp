@@ -2,7 +2,7 @@
 
 namespace App\Enums\User;
 
-enum Roll: int
+enum Role: int
 {
     case Reader = 1;
     case Editor = 2;
