@@ -6,9 +6,11 @@
     <h1 class="text-4xl text-center mt-16">銘柄一覧</h1>
     @include('components.success')
     <div class="mx-auto w-5/6 my-16">
-        <div class="text-right mx-auto w-5/6 mb-10">
-            <a href="{{ route('stock.create') }}" class="rounded-full  bg-emerald-600  text-white px-5 py-3 text-sm">新規登録</a>
-        </div>
+        @can('isEditor')
+            <div class="text-right mx-auto w-5/6 mb-10">
+                <a href="{{ route('stock.create') }}" class="rounded-full  bg-emerald-600  text-white px-5 py-3 text-sm">新規登録</a>
+            </div>
+        @endcan
         @foreach($stocks->chunk(2) as $chunk)
         <ul class="flex justify-between items-center gap-3 my-3">
             @foreach($chunk as $stock)
@@ -27,14 +29,16 @@
                                 <th class="mb-2">操作</th>
                                 <td class="flex my-3 gap-2 items-start">
                                     <a href="{{ route('stock.show', $stock) }}" class="rounded-full  bg-indigo-600  text-white px-5 py-3 text-sm">詳細</a>
-                                    <a href="{{ route('stock.edit', $stock) }}" class="rounded-full  bg-emerald-600  text-white px-5 py-3 text-sm">編集</a>
-                                    @if($stock->transactions_count === 0)
-                                    <form action="{{ route('stock.destroy', $stock) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="rounded-full  bg-red-400  text-white px-5 py-3 text-sm">削除</button>
-                                    </form>
-                                    @endif
+                                    @can('isEditor')
+                                        <a href="{{ route('stock.edit', $stock) }}" class="rounded-full  bg-emerald-600  text-white px-5 py-3 text-sm">編集</a>
+                                        @if($stock->transactions_count === 0)
+                                        <form action="{{ route('stock.destroy', $stock) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="rounded-full  bg-red-400  text-white px-5 py-3 text-sm">削除</button>
+                                        </form>
+                                        @endif
+                                    @endcan
                                 </td>
                             </tr>
                         </tbody>

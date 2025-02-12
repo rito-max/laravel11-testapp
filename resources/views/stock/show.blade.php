@@ -18,9 +18,11 @@
         <p>保有数量:<span class="ml-3 font-bold text-xl">{{ $totalInfoArray['quantity'] }}</span></p>
     </div>
     <div class="">
-        <div class="text-right mx-auto w-5/6">
-            <a href="{{ route('stock.transaction.create', $stock) }}" class="rounded-full  bg-emerald-600  text-white px-5 py-3 text-sm">新規登録</a>
-        </div>
+        @can('isEditor')
+            <div class="text-right mx-auto w-5/6">
+                <a href="{{ route('stock.transaction.create', $stock) }}" class="rounded-full  bg-emerald-600  text-white px-5 py-3 text-sm">新規登録</a>
+            </div>
+        @endcan
         <table class="text-center mx-auto w-5/6 mt-10">
             <thead>
                 <tr>
@@ -39,11 +41,13 @@
                     <td class="p-3 border-2 border-white">{{ $transaction->quantity }}</td>
                     <td class="p-3 border-2 border-white">{{ $transaction->type_name }}</td>
                     <td class="p-3 border-2 border-white">
-                        <form action="{{ route('transaction.destroy', $transaction) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="rounded-full  bg-red-400  text-white px-5 py-3 text-sm">削除</button>
-                        </form>
+                        @can('isEditor')
+                            <form action="{{ route('transaction.destroy', $transaction) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="rounded-full  bg-red-400  text-white px-5 py-3 text-sm">削除</button>
+                            </form>
+                        @endcan
                     </td>
                 </tr>
                 @endforeach
