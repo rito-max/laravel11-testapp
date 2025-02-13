@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Jobs\SendLoginMail;
 
 class LoginController extends Controller
 {
@@ -20,6 +21,9 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            //ログイン通知メールをキューに追加
+            SendLoginMail::dispatch(Auth::user());
+
             $request->session()->regenerate();
  
             return redirect()->route('stock.index');

@@ -52,7 +52,7 @@ class LoginMail extends Mailable
     {
         // 画像ファイルの添付テスト
         return [
-            Attachment::fromPath('laravel-logo.png')
+            Attachment::fromPath(storage_path('img/laravel-logo.png'))
                 ->as('testAttach.png')
                 ->withMime('image/png'),
         ];

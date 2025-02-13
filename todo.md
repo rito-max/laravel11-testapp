@@ -35,7 +35,7 @@
     https://laravel.com/docs/11.x/authorization#via-the-user-model
     https://laravel.com/docs/11.x/authorization#via-the-gate-facade
 
-## 2/x
+## 2/13
 
 -   ログイン通知メール処理をキューで処理するようにする
     https://laravel.com/docs/11.x/queues
@@ -93,7 +93,28 @@ sail artisan make:test StockControllerTest
 sail artisan make:mail LoginMail
 sail artisan make:policy StockPolicy --model=Stock
 sail artisan make:policy TransactionPolicy --model=Transaction
+sail artisan make:job SendLoginMail
 ```
+
+## キュー worker
+
+job を処理し続けさせるためには、下記コマンドでキューワーカーを動かし続ける必要がある。
+本番環境では、supervisor を使って監視するなど、キューワーカーを止めない仕組みが必要。
+
+```
+sail artisan queue:work
+```
+
+運用目線で、ソースコードの変更を反映させるには、restart が必要。
+https://laravel.com/docs/11.x/queues#queue-workers-and-deployment
+
+失敗した job の再試行
+
+```
+sail artisan queue:retry all
+```
+
+https://laravel.com/docs/11.x/queues#retrying-failed-jobs
 
 ## tailwind の色一覧　便利！
 
