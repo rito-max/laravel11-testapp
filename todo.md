@@ -40,10 +40,15 @@
 -   ログイン通知メール処理をキューで処理するようにする
     https://laravel.com/docs/11.x/queues
 
-## 2/xx
+## 2/17
 
 -   Sentinum の導入、API トークンベース認証追加
--   API 機能追加（株銘柄一覧取得 API）
+-   API 機能追加（株銘柄一覧取得、株銘柄新規作成）
+-   Token ability の導入（API トークン毎にできる処理: 権限付与を行える）
+    https://laravel.com/docs/11.x/sanctum#token-abilities
+    株銘柄一覧取得: 認証済みなら実行可能
+    株銘柄新規作成: 実行に編集権編が必要
+-   API 機能のテスト作成（トークン発行処理、トークンの ability 毎の権限制御テスト）
 
 # 各種 便利コマンド　メモ
 
@@ -94,6 +99,7 @@ sail artisan make:mail LoginMail
 sail artisan make:policy StockPolicy --model=Stock
 sail artisan make:policy TransactionPolicy --model=Transaction
 sail artisan make:job SendLoginMail
+sail artisan install:api
 ```
 
 ## キュー worker
