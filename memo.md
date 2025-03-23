@@ -97,3 +97,97 @@ sail artisan sail:publish で、docker をカスタマイズできる！
 
 sail artisan make:observer TransactionObserver --model=Transaction
 https://laravel.com/docs/11.x/eloquent#observers
+
+## laravel プロジェクトに react,typescript を導入
+
+### 前提
+
+Laravel9 から、デフォルトのビルドツールが、webpack から Vite に変わっているので、
+Vite で React を扱えるようにする。
+
+###　 vite の設定
+
+-   必要なモジュール等を導入
+
+```
+// viteでreactを扱えるようにするモジュール
+sail npm install @vitejs/plugin-react --save-dev
+
+// react, typescript関連のモジュール
+sail npm install -D react react-dom @types/react @types/react-dom
+sail npm install -D typescript
+// typescriptのconfig生成
+npx tsc --init --jsx react-jsx
+```
+
+-   vite.config.ts の設定変更
+    先ほど install した vite の react plugin を使用
+    今回は、spa ではなく、いくつかの画面に部分的に導入するのでエントリーポイントを複数設定する
+
+```
+import { defineConfig } from "vite";
+import laravel from "laravel-vite-plugin";
+import react from "@vitejs/plugin-react";//追記
+
+export default defineConfig({
+    plugins: [
+        react(),//追記
+        laravel({
+            input: [
+                //必要に応じてここにエントリポイントを追加する
+                "resources/js/pages/stockDetails.tsx",//追記
+                "resources/css/app.css",
+                "resources/js/app.tsx",
+            ],
+            refresh: true,
+        }),
+    ],
+});
+```
+
+-   ディレクトリ構成を検討（これはより良い構成を常に模索）
+    一旦これで。
+
+```
+resources/js/
+├── components/ # 再利用可能な React コンポーネント
+│ ├── ui/ # ボタンや入力フォームなどの UI パーツ
+│ │ ├── Button.tsx
+│ │ ├── Input.tsx
+│ │ └── Modal.tsx
+│ ├── layout/ # レイアウト系のコンポーネント
+│ │ ├── Header.tsx
+│ │ ├── Footer.tsx
+│ │ └── Sidebar.tsx
+│ └── shared/ # 特定のページに依存しない汎用コンポーネント
+│ ├── Loading.tsx
+│ └── ErrorBoundary.tsx
+│
+├── hooks/ # カスタムフック（再利用可能なロジック）
+│ ├── useAuth.ts
+│ ├── useFetch.ts
+│ └── useTheme.ts
+│
+├── pages/ # 画面ごとのエントリーポイント
+│ ├── PageA.tsx
+│ ├── PageB.tsx
+│ ├── PageC.tsx
+│
+├── types/ # TypeScript の型定義
+│ ├── api.ts # API レスポンスの型
+│ ├── auth.ts # 認証関連の型
+│ ├── user.ts # ユーザー関連の型
+│
+├── utils/ # 汎用的なユーティリティ関数
+│ ├── date.ts # 日付関連の処理
+│ ├── storage.ts # localStorage, sessionStorage 管理
+│ ├── fetcher.ts # API 通信系
+```
+
+-   react を使いたいページに、エントリポイントのファイルを読み込ませる。
+
+```
+@vite('resources/js/pages/stockDetails.tsx')
+```
+
+-   あとは、エントリポイントから react 処理を書いていけば、導入できる。

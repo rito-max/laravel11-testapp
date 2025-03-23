@@ -42,19 +42,4 @@ class TransactionController extends Controller
         session()->flash('success', "取引データを登録しました。");
         return redirect()->route('stock.show', $stock);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Transaction $transaction)
-    {
-        //権限チェック（via-the-user-model）
-        if (Auth::user()->cannot('delete', $transaction)) {
-            abort(403);
-        }
-
-        $transaction->delete();
-        session()->flash('success', "取引データを削除しました。");
-        return redirect()->back();
-    }
 }

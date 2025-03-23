@@ -17,8 +17,8 @@ class StockController extends Controller
         //権限チェック
         Gate::authorize('viewAny', Stock::class);
 
-        $date['stocks'] = Stock::withCount('transactions')->orderByDesc('updated_at')->simplePaginate(6);
-        return view('stock.index', $date);
+        $data['stocks'] = Stock::withCount('transactions')->orderByDesc('updated_at')->simplePaginate(6);
+        return view('stock.index', $data);
     }
 
     /**

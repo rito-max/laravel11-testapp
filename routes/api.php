@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 
-
 //トークン発行
 Route::post('/tokens/create', [ApiController::class, 'createToken']);
 
